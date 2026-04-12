@@ -1,0 +1,7 @@
+[package]
+name = "unilj-fri-thesis-bma"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Žiga Patačko Koderman"]
+description = "UL FRI master's thesis template for Typst, based on the official LaTeX template"
+license = "MIT"
