@@ -25,35 +25,47 @@
   v(2em)
 
   // Thesis title
-  text(size: 18pt, weight: "bold")[#config.title]
+  block[
+    #set par(justify: false)
+    #set text(hyphenate: false)
+    #text(size: 18pt, weight: "bold")[#config.title]
+  ]
 
   v(2em)
 
   // Thesis type and program
-  smallcaps[MAGISTRSKO DELO]
-  linebreak()
-  v(2mm)
-  smallcaps[#config.program]
+  block[
+    #set par(justify: false)
+    #set text(hyphenate: false)
+    #smallcaps[MAGISTRSKO DELO]
+    #linebreak()
+    #v(2mm)
+    #smallcaps[#config.program]
 
-  if config.at("track", default: none) != none {
-    linebreak()
-    v(2mm)
-    smallcaps[Smer: #config.track]
-  }
+    #if config.at("track", default: none) != none {
+      linebreak()
+      v(2mm)
+      smallcaps[Smer: #config.track]
+    }
+  ]
 
   v(1fr)
 
   // Supervisor
-  text(size: 12pt)[
-    #smallcaps[Mentor]: #config.supervisor
-  ]
-
-  if config.at("cosupervisor", default: none) != none {
-    linebreak()
-    text(size: 12pt)[
-      #smallcaps[Somentor]: #config.cosupervisor
+  block[
+    #set par(justify: false)
+    #set text(hyphenate: false)
+    #text(size: 12pt)[
+      #smallcaps[Mentor]: #config.supervisor
     ]
-  }
+
+    #if config.at("cosupervisor", default: none) != none {
+      linebreak()
+      text(size: 12pt)[
+        #smallcaps[Somentor]: #config.cosupervisor
+      ]
+    }
+  ]
 
   v(2em)
 
