@@ -208,6 +208,7 @@
 
   show heading.where(level: 2): it => {
     v(1.2em)
+    set par(first-line-indent: 0pt)
     text(size: 14pt, weight: "bold")[
       #if it.numbering != none {
         counter(heading).display(it.numbering)
@@ -220,6 +221,7 @@
 
   show heading.where(level: 3): it => {
     v(0.8em)
+    set par(first-line-indent: 0pt)
     text(size: 12pt, weight: "bold")[
       #if it.numbering != none {
         counter(heading).display(it.numbering)
@@ -228,6 +230,19 @@
       #it.body
     ]
     v(0.5em)
+  }
+
+  show heading.where(level: 4): it => {
+    v(0.6em)
+    set par(first-line-indent: 0pt)
+    text(size: 12pt, weight: "bold")[
+      #if it.numbering != none {
+        counter(heading).display(it.numbering)
+        h(0.4em)
+      }
+      #it.body
+    ]
+    v(0.4em)
   }
 
   // Chapter-aware numbering defaults (main body).
