@@ -3,7 +3,7 @@
 // Based on: UL-FRI/thesis-BMA LaTeX template
 // =============================================================================
 
-#import "@preview/headcount:0.1.0": dependent-numbering, reset-counter
+#import "@preview/headcount:0.1.0": dependent-numbering
 
 // --- LaTeX logo helper -------------------------------------------------------
 // Reproduces the kerning of the LaTeX wordmark.
@@ -179,6 +179,13 @@
     justify: true,
   )
 
+  // Indent the first paragraph after figures and algorithms too (but not after headings).
+  // With first-line-indent all:false, Typst only indents consecutive paragraphs; the
+  // fake empty paragraph (box) makes the next paragraph count as consecutive, and measure
+  // subtracts the extra vertical spacing it would otherwise add.
+  let fakepar = context { box(); v(-measure(block() + block()).height) }
+  show figure: it => it + fakepar
+
   // --- Heading styles ---
   // Chapter headings: two-line LaTeX book style
   //   Numbered:   "Poglavje N" / gap / "Title"
@@ -186,6 +193,13 @@
   //   Unnumbered: just "Title"
   // All level-1 headings start on a new odd page with a large top gap.
   show heading.where(level: 1): it => {
+    // Restart per-chapter counters for numbered content here, rather than via a
+    // separate `show heading` rule: a re-emitting heading rule would strip the
+    // block spacing of sub-headings (levels 2-4).
+    counter(figure.where(kind: image)).update((0,))
+    counter(figure.where(kind: table)).update((0,))
+    counter(figure.where(kind: "algorithm")).update((0,))
+    counter(math.equation).update((0,))
     pagebreak(to: "odd", weak: true)
     v(80pt)
     set par(justify: false, first-line-indent: 0pt)
@@ -206,54 +220,20 @@
     v(46pt)
   }
 
-  show heading.where(level: 2): it => {
-    v(1.2em)
-    set par(first-line-indent: 0pt)
-    text(size: 14pt, weight: "bold")[
-      #if it.numbering != none {
-        counter(heading).display(it.numbering)
-        h(0.4em)
-      }
-      #it.body
-    ]
-    v(0.8em)
-  }
-
-  show heading.where(level: 3): it => {
-    v(0.8em)
-    set par(first-line-indent: 0pt)
-    text(size: 12pt, weight: "bold")[
-      #if it.numbering != none {
-        counter(heading).display(it.numbering)
-        h(0.4em)
-      }
-      #it.body
-    ]
-    v(0.5em)
-  }
-
-  show heading.where(level: 4): it => {
-    v(0.6em)
-    set par(first-line-indent: 0pt)
-    text(size: 12pt, weight: "bold")[
-      #if it.numbering != none {
-        counter(heading).display(it.numbering)
-        h(0.4em)
-      }
-      #it.body
-    ]
-    v(0.4em)
-  }
+  // Sub-headings stay real heading elements (block-level), styled via set rules.
+  // Reconstructing them as content would make Typst trim the trailing below-spacing
+  // at the document top level; keeping them as elements preserves proper spacing
+  // and avoids indenting the following paragraph. Numbering uses the default layout.
+  show heading.where(level: 2): set text(size: 14pt, weight: "bold")
+  show heading.where(level: 2): set block(above: 2.0em, below: 1.5em)
+  show heading.where(level: 3): set text(size: 12pt, weight: "bold")
+  show heading.where(level: 3): set block(above: 1.6em, below: 1.2em)
+  show heading.where(level: 4): set text(size: 12pt, weight: "bold")
+  show heading.where(level: 4): set block(above: 1.4em, below: 1.1em)
 
   // Chapter-aware numbering defaults (main body).
   set figure(numbering: dependent-numbering("1.1"))
   set math.equation(numbering: dependent-numbering("(1.1)"), supplement: none)
-
-  // Reset per-chapter counters for numbered content.
-  show heading: reset-counter(counter(figure.where(kind: image)), levels: 1)
-  show heading: reset-counter(counter(figure.where(kind: table)), levels: 1)
-  show heading: reset-counter(counter(figure.where(kind: "algorithm")), levels: 1)
-  show heading: reset-counter(counter(math.equation), levels: 1)
 
   // --- Figure and table captions ---
   show figure.caption: it => {
