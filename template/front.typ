@@ -93,19 +93,19 @@
 
   // CC icons
   align(center)[
-    #box(image("assets/cc-licenca/cc_cc_30.pdf", height: 12pt))
+    #box(image("assets/cc-licenca/cc_cc_30.svg", height: 12pt))
     #h(4pt)
-    #box(image("assets/cc-licenca/cc_by_30.pdf", height: 12pt))
+    #box(image("assets/cc-licenca/cc_by_30.svg", height: 12pt))
     #h(4pt)
-    #box(image("assets/cc-licenca/cc_sa_30.pdf", height: 12pt))
+    #box(image("assets/cc-licenca/cc_sa_30.svg", height: 12pt))
   ]
 
   if config.at("code-published", default: false) {
     v(1.5cm)
     set text(size: 9pt)
     [
-      Izvorna koda zaključnega dela, njeni rezultati in v ta namen razvita programska oprema je ponujena pod licenco GNU General Public License,
-      različica 3 (ali novejša). To pomeni, da se lahko prosto distribuira in/ali predeluje pod njenimi pogoji in je na voljo na #link(config.at("code-url", default: "")).
+      Izvorna koda zaključnega dela, njeni rezultati in v ta namen razvita programska oprema so ponujeni pod licenco GNU General Public License,
+      različica 3 (ali novejša). To pomeni, da se lahko prosto distribuirajo in/ali predelujejo pod njenimi pogoji in so na voljo na #link(config.at("code-url", default: "")).
       Podrobnosti licence so dostopne na spletni strani #link("http://www.gnu.org/licenses/").
     ]
   }

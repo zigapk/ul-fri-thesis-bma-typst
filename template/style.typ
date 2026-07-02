@@ -71,9 +71,11 @@
 
   // Find the current chapter title (\leftmark in LaTeX)
   let chapter-title = ""
+  let chapter-page = 0
   let all-h1 = query(heading.where(level: 1))
   for h in all-h1 {
     if h.location().position().page <= here().position().page {
+      chapter-page = h.location().position().page
       if h.numbering != none {
         let nums = counter(heading).at(h.location())
         chapter-title = numbering(h.numbering, ..nums) + ". " + content-to-text(h.body)
@@ -87,7 +89,7 @@
   let section-title = ""
   let all-h2 = query(heading.where(level: 2))
   for h in all-h2 {
-    if h.location().position().page <= here().position().page {
+    if h.location().position().page <= here().position().page and h.location().position().page >= chapter-page {
       if h.numbering != none {
         let nums = counter(heading).at(h.location())
         section-title = numbering(h.numbering, ..nums) + ". " + content-to-text(h.body)
@@ -179,13 +181,6 @@
     justify: true,
   )
 
-  // Indent the first paragraph after figures and algorithms too (but not after headings).
-  // With first-line-indent all:false, Typst only indents consecutive paragraphs; the
-  // fake empty paragraph (box) makes the next paragraph count as consecutive, and measure
-  // subtracts the extra vertical spacing it would otherwise add.
-  let fakepar = context { box(); v(-measure(block() + block()).height) }
-  show figure: it => it + fakepar
-
   // --- Heading styles ---
   // Chapter headings: two-line LaTeX book style
   //   Numbered:   "Poglavje N" / gap / "Title"
@@ -232,7 +227,7 @@
   show heading.where(level: 4): set block(above: 1.4em, below: 1.1em)
 
   // Chapter-aware numbering defaults (main body).
-  set figure(numbering: dependent-numbering("1.1"))
+  set figure(numbering: dependent-numbering("1.1"), placement: auto)
   set math.equation(numbering: dependent-numbering("(1.1)"), supplement: none)
 
   // --- Figure and table captions ---

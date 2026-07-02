@@ -15,7 +15,7 @@
 
   body
 
-  [=== Ključne besede]
+  [#heading(level: 3, numbering: none, outlined: false)[Ključne besede]]
   emph[#config.keywords]
 
   clear-empty-double-page()
@@ -34,7 +34,7 @@
 
   body
 
-  [=== Keywords]
+  [#heading(level: 3, numbering: none, outlined: false)[Keywords]]
   emph[#config.at("keywords-en", default: "")]
 
   // Reset language back to Slovenian after English abstract content.
